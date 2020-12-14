@@ -1,65 +1,47 @@
 #!/usr/bin/env python3
-import os
-import requests
-
-def minify_css(path_to_css_file):
-    url = 'https://cssminifier.com/raw'
-    with open(path_to_css_file, 'rb') as f:
-        data = {'input': f.read()}
-    response = requests.post(url, data=data)
-    with open(path_to_css_file[:-4]+'.min.css', 'w') as f:
-        f.write(response.text)
-
-def minify_js(path_to_js_file):
-    url = 'https://javascript-minifier.com/raw'
-    with open(path_to_js_file, 'rb') as f:
-        data = {'input': f.read()}
-    response = requests.post(url, data=data)
-    with open(path_to_js_file[:-3]+'.min.js', 'w') as f:
-        f.write(response.text)
-
-def find_css_and_js(list_of_files, directory='.'):
-    css_files = []
-    js_files = []
-    for file in list_of_files:
-        if '.css' in file:
-            yield 'css', directory+'/'+file
-        elif '.js' in file:
-            yield 'js', directory+'/'+file
-        else:
-            continue
-
-def main(directory=['.']):
-    print('started minifying')
-    js_files = []
-    css_files = []
-    for d in directory:
-        for i in os.walk(d):
-            if i[0] == '.':
-                for type_of_file, file in find_css_and_js(i[2]):
-                    if '.min.' in file:
-                        continue
-                    if type_of_file == 'css':
-                        css_files.append(file)
-                    elif type_of_file == 'js':
-                        js_files.append(file)
-            else:
-                for type_of_file, file in find_css_and_js(i[2], i[0]):
-                    if '.min' in file:
-                        continue
-                    if type_of_file == 'css':
-                        css_files.append(file)
-                    elif type_of_file == 'js':
-                        js_files.append(file)
-    if len(js_files) == 0 and len(css_files) == 0:
-        print('not found specified files((\nexiting...')
-        exit()
-    for css_file in css_files:
-        minify_css(css_file)
-    for js_file in js_files:
-        minify_js(js_file)
-    print('all found files (css and js) were minified!!!')
-    exit()
-
-if __name__ == '__main__':
-    main()
+P='w'
+O='input'
+E='rb'
+N=exit
+M=len
+J='js'
+I='css'
+H='.'
+G=print
+A=open
+import os,requests as C
+def K(path_to_css_file):
+	D=path_to_css_file;F='https://cssminifier.com/raw'
+	with A(D,E)as B:G={O:B.read()}
+	H=C.post(F,data=G)
+	with A(D[:-4]+'.min.css',P)as B:B.write(H.text)
+def L(path_to_js_file):
+	D=path_to_js_file;F='https://javascript-minifier.com/raw'
+	with A(D,E)as B:G={O:B.read()}
+	H=C.post(F,data=G)
+	with A(D[:-3]+'.min.js',P)as B:B.write(H.text)
+def F(list_of_files,directory=H):
+	C='/';B=directory;D=[];E=[]
+	for A in list_of_files:
+		if'.css'in A:yield(I,B+C+A)
+		elif'.js'in A:yield(J,B+C+A)
+		else:continue
+def B(directory=[H]):
+	G('started minifying');C=[];D=[]
+	for O in directory:
+		for E in os.walk(O):
+			if E[0]==H:
+				for (B,A) in F(E[2]):
+					if'.min.'in A:continue
+					if B==I:D.append(A)
+					elif B==J:C.append(A)
+			else:
+				for (B,A) in F(E[2],E[0]):
+					if'.min'in A:continue
+					if B==I:D.append(A)
+					elif B==J:C.append(A)
+	if M(C)==0 and M(D)==0:G('not found specified files((\nexiting...');N()
+	for P in D:K(P)
+	for Q in C:L(Q)
+	G('all found files (css and js) were minified!!!');N()
+if __name__=='__main__':B()
